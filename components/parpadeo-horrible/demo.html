@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test parpadeo-horrible</title>
+    
+    <!-- Import library Polyfill-->
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script>
+        window.Polymer = {
+            dom: 'shady',
+            lazyRegister: true
+        };
+    </script>
+
+    <!-- Import polymer components-->
+    <link rel="import" href="./parpadeo-horrible.html">
+
+     <style is="custom-style">
+
+        parpadeo-horrible {
+            --color-background-counter: red;
+            --color-text-counter: white;
+        }
+        
+    </style>
+
+</head>
+<body>
+    <parpadeo-horrible 
+      frecuency="1000">
+            Este texto parpadea
+    </parpadeo-horrible>    
+</body>
+</html>

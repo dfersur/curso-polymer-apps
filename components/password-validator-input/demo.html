@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test password and confirm password</title>
+    
+    <!-- Import library Polyfill-->
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script>
+        window.Polymer = {
+            dom: 'shady',
+            lazyRegister: true
+        };
+    </script>
+
+    <!-- Import polymer components-->
+    <link rel="import" href="./password-validator-input.html">
+
+</head>
+<body>
+
+        <password-validator-input 
+            len=6
+        ></password-validator-input>
+
+</body>
+</html>

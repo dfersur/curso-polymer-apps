@@ -1,0 +1,37 @@
+<link rel="import" href="elements.html">
+
+<dom-module id="form-validator">
+
+    <template>
+
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+
+        <password-validator-input 
+            password-ok={{confirmarPassword}}
+            len="3"
+        ></password-validator-input>
+
+        <paper-button raised disabled="{{!confirmarPassword}}">Send</paper-button>
+        <paper-button raised on-tap="resetForm">Reset</paper-button>
+        <paper-toast text="Password Ok" opened="[[confirmarPassword]]"></paper-toast>
+
+    </template>
+
+    <script>
+
+        Polymer({
+            is: 'form-validator',
+            resetForm: function(){
+                var selectors = document.querySelectorAll("paper-input");
+                for (var i=0;i<selectors.length;i++) {
+                    selectors[i].value="";
+                }
+            }
+        });
+        
+    </script>
+</dom-module>

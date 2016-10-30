@@ -1,0 +1,91 @@
+
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+
+<dom-module id="clasificacion-insertar">
+  <template>
+    <style>
+      :host {
+        display: block;
+       
+      }
+      /*https://github.com/PolymerElements/paper-dialog-behavior/pull/56*/
+      paper-dialog{
+        --paper-dialog: {
+          width: 60vw;
+        }
+      }
+      h2{
+        color: var(--app-primary-color);
+      }
+    </style>
+    
+    
+    <iron-ajax
+       id="elajax"
+       url="[[urlApiPelis]]clasificaciones/"
+       method="POST"
+       handle-as="json"
+       body="{{clasificacion}}"
+       content-type="application/json"
+       on-response="handleResponse"
+    ></iron-ajax>
+    
+
+    <paper-dialog id="dialogo">
+      <h2>Insertar Clasificacion</h2>
+      <clasificacion-formulario
+        elemento="{{clasificacion}}"
+      ></clasificacion-formulario>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button on-tap="insertar">Accept</paper-button>
+      </div>
+    </paper-dialog>
+
+
+  </template>
+  <script>
+    Polymer({
+      is: 'clasificacion-insertar',
+
+      behaviors: [DialogoBehavior, ApiBehavior, EmisorFeedbackBehavior, ValidadorBehavior],
+
+      properties: {
+        clasificacion: {
+          type: Object,
+          value: function(){
+            return {
+              nombre: ''
+            }
+          }
+        }
+      },
+
+      insertar: function(e) {
+        if(!this.validarNombre(this.clasificacion.nombre)){
+          this.$.inputnombre.invalid = true;
+          this.feedbackPositivo('El nombre no es válido')
+          return false;
+        }
+        this.$.elajax.generateRequest();
+      },
+
+
+      handleResponse: function(e, result) {
+        console.log('respuesta recibida', result);
+        if(result.status == 201){
+          this.feedbackPositivo('Insertado');
+          this.fire('actualizar-listado');
+          this.close();
+        } else {
+          this.feedbackNegativo('Error de inserción')
+        }
+      },
+
+    });
+  </script>
+</dom-module>

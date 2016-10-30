@@ -1,0 +1,64 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="parpadeo-horrible">
+
+    <template>
+
+        <style>
+            :host {
+                display: block;
+            }
+            .counter {
+                background-color: var(--color-background-counter,black);
+                color: var(--color-text-counter,white);
+                width: 20px;
+            }
+            p {
+                display: inline-block;
+                text-align: center;
+                padding: 3px;
+            }
+            
+            [hidden] { display: none }
+        </style>
+
+        <p class="counter">[[count]]</p>
+        <p hidden="[[!isVisible]]"><content></content></p>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'parpadeo-horrible',
+            properties: {
+                retard: Object,
+                isVisible: {
+                    type: Boolean,
+                    value: true
+                },
+                frecuency: {
+                    type: Number,
+                    value: 1000
+                },
+                count: {
+                    type: Number,
+                    value: 0
+                }
+            },
+            ready: function() {
+                this.update();
+            },
+            detached: function() {
+                this.cancelAsync(this.retard);
+            },
+            update: function() {
+                if (!this.isVisible)
+                    this.count++;
+                this.isVisible=!this.isVisible;
+                this.retard = this.async(this.update, this.frecuency);
+            }
+        });
+
+    </script>
+
+</dom-module>

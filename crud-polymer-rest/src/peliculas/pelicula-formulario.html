@@ -1,0 +1,65 @@
+<dom-module id="pelicula-formulario">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .cuerpo{
+       
+      }
+    </style>
+
+    <iron-ajax
+      id="elajax"
+      auto
+      url="http://localhost:3000/clasificaciones/"
+      handle-as="json"
+      last-response="{{clasificaciones}}"
+    ></iron-ajax>
+
+    <div class="cuerpo">
+        <paper-input 
+          required 
+          auto-validate 
+          error-message="2 o más caracteres" 
+          id="inputnombre" 
+          label="Nombre" 
+          value="{{elemento.nombre}}"
+        ></paper-input>
+        <paper-input 
+          required 
+          auto-validate 
+          error-message="2 o más caracteres" 
+          id="inputdirector" 
+          label="Director" 
+          value="{{elemento.director}}"
+        ></paper-input>
+        <paper-dropdown-menu label="Clasificación">
+          <paper-listbox class="dropdown-content" selected="{{elemento.clasificacion}}" attr-for-selected="name">
+            <template is="dom-repeat" items="[[clasificaciones]]" as="clasificacion">
+              <paper-item name="[[clasificacion.nombre]]">[[clasificacion.nombre]]</paper-item>
+            </template>
+          </paper-listbox>
+        </paper-dropdown-menu>
+      
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'pelicula-formulario',
+      properties: {
+        elemento: {
+          type: Object,
+          notify: true,
+          value: function() {
+            return {
+              nombre: '',
+              director: '',
+              clasificacion: ''
+            }
+          }
+        }
+      },
+    });
+  </script>
+</dom-module>

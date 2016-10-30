@@ -1,0 +1,93 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="timestamp-to-date">
+
+    <template>
+
+        <style>
+            :host {
+                display: block;
+            }
+            .custom-style{
+                color: var(--title-color,black);
+            }
+            div {
+                margin: 20px;
+                padding: 20px;
+                @apply(--box-style);
+            }
+        </style>
+
+        <div>
+            <p class="custom-style">{{timestampToDate}}</p>
+        </div>
+
+    </template>
+
+    <script>
+
+        Polymer({
+            is: 'timestamp-to-date',
+
+            properties: {
+                timestamp: Number,
+                lang: {
+                    type: String,
+                    value: "es"
+                },
+                timestampToDate: {
+                    type: String,
+                    computed: 'computeTimestamp(timestamp,lang)'
+                }
+            },
+
+            computeTimestamp: function(timestamp,language) {
+
+                var languageFormatArray = new Array();
+
+                switch(language) {
+                    case "en": languageFormatArray = this.parseEnglishDate();break;
+                    case "es": languageFormatArray = this.parseSpanishDate();break;
+                }
+
+                return this.parseDate(timestamp,languageFormatArray);
+
+            },
+            parseDate: function(timestamp,languageFormatArray){
+
+                var timeParsed = new Date(timestamp);
+
+                var day = timeParsed.getDate();
+                var dayOfWeek = timeParsed.getDay();
+                var month = timeParsed.getMonth() + 1;
+                var year = timeParsed.getFullYear();
+                
+                return languageFormatArray[0][dayOfWeek] + ", " + day + " " + languageFormatArray[2] + " " + languageFormatArray[1][month - 1] + " " + languageFormatArray[3] + " " + year;
+            
+            },
+
+            parseSpanishDate: function() {
+
+                var daysOfWeek = new Array("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado");
+                var monthOfYear =  new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+                var connectionString1 = "de";
+                var connectionString2 = "del";
+                
+                return new Array(daysOfWeek,monthOfYear,connectionString1,connectionString2);
+            },
+
+            parseEnglishDate: function() {
+
+                var daysOfWeek = new Array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
+                var monthOfYear = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+                var connectionString1 = "of";
+                var connectionString2 = "";
+                
+                return new Array(daysOfWeek,monthOfYear,connectionString1,connectionString2);
+            }
+
+        });
+       
+    </script>
+
+</dom-module>

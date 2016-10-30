@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    
+    <!-- Import library Polyfill-->
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script>
+        window.Polymer = {
+            dom: 'shady',
+            lazyRegister: true
+        };
+    </script>
+
+    <!-- Import polymer components-->
+    <link rel="import" href="./form-validator.html">
+
+</head>
+<body>
+
+    <form-validator></form-validator>   
+
+</body>
+</html>

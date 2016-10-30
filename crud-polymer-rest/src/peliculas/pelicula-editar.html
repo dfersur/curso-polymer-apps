@@ -1,0 +1,70 @@
+
+<dom-module id="pelicula-editar">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    
+    <iron-ajax
+      id="elajax"
+      url="[[urlApiPelis]]peliculas/[[pelicula.id]]"
+      method="PUT"
+      body="{{pelicula}}"
+      content-type="application/json"
+      handle-as="json"
+      on-response="handleResponse"
+      on-error="handleError"
+    ></iron-ajax>
+
+
+    <paper-dialog id="dialogo">
+      <h2>Editar pelicula</h2>
+      <pelicula-formulario
+        elemento="{{pelicula}}"
+      ></pelicula-formulario>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button on-tap="editar">Aceptar</paper-button>
+      </div>
+    </paper-dialog>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'pelicula-editar',
+
+      behaviors: [DialogoBehavior, ApiBehavior, EmisorFeedbackBehavior, ValidadorBehavior],
+
+      properties: {
+        pelicula: Object
+      },
+
+      editar: function() {
+        if(this.validarNombre(this.pelicula.nombre))
+          this.$.elajax.generateRequest();
+        else {
+          this.feedbackNegativo('Ese nombre no es válido');
+        }
+      },
+
+      handleError: function(e, res) {
+        this.feedbackNegativo('Error')
+      },
+
+      handleResponse: function(e, res) {
+        console.log(res.status, res.succeeded, res.response, res.timedOut)
+        if(res.status == 200) {
+          this.feedbackPositivo('Editada una película')
+          this.fire('actualizar-listado-pelicula')
+          this.close();
+        } else {
+          this.feedbackNegativo('El servidor devolvió un código de error')
+        }
+      },
+
+    });
+  </script>
+</dom-module>

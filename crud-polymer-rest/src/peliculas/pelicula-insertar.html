@@ -1,0 +1,94 @@
+
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+
+<dom-module id="pelicula-insertar">
+  <template>
+    <style>
+      :host {
+        display: block;
+       
+      }
+      /*https://github.com/PolymerElements/paper-dialog-behavior/pull/56*/
+      paper-dialog{
+        --paper-dialog: {
+          width: 60vw;
+        }
+      }
+      h2{
+        color: var(--app-primary-color);
+      }
+    </style>
+    
+    
+    <iron-ajax
+       id="elajax"
+       url="[[urlApiPelis]]peliculas/"
+       method="POST"
+       handle-as="json"
+       body="{{pelicula}}"
+       content-type="application/json"
+       on-response="handleResponse"
+    ></iron-ajax>
+  
+    <paper-dialog id="dialogo">
+      <paper-dialog-scrollable>
+      <h2>Insertar pelicula</h2>
+      <pelicula-formulario
+        elemento="{{pelicula}}"
+      ></pelicula-formulario>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button on-tap="insertar">Accept</paper-button>
+      </div>
+      </paper-dialog-scrollable>
+    </paper-dialog>
+
+
+  </template>
+  <script>
+    Polymer({
+      is: 'pelicula-insertar',
+
+      behaviors: [DialogoBehavior, ApiBehavior, EmisorFeedbackBehavior, ValidadorBehavior],
+
+      properties: {
+        pelicula: {
+          type: Object,
+          value: function(){
+            return {
+              nombre: '',
+              director: '',
+              clasificacion: ''
+            }
+          }
+        }
+      },
+
+      insertar: function(e) {
+        if(!this.validarNombre(this.pelicula.nombre)){
+          this.$.inputnombre.invalid = true;
+          this.feedbackPositivo('El nombre no es válido')
+          return false;
+        }
+        this.$.elajax.generateRequest();
+      },
+
+
+      handleResponse: function(e, result) {
+        console.log('respuesta recibida', result);
+        if(result.status == 201){
+          this.feedbackPositivo('Insertada una película');
+          this.fire('actualizar-listado-pelicula');
+          this.close();
+        } else {
+          this.feedbackNegativo('Error de inserción')
+        }
+      },
+
+    });
+  </script>
+</dom-module>

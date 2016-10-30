@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test timestamp-to-date</title>
+    
+    <!-- Import library Polyfill-->
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script>
+        window.Polymer = {
+            dom: 'shady',
+            lazyRegister: true
+        };
+    </script>
+
+    <!-- Import polymer components-->
+    <link rel="import" href="./timestamp-to-date.html">
+
+    <style is="custom-style">
+
+        timestamp-to-date {
+            --title-color: blue;
+            --box-style: {
+                border: 1px solid #008;
+                background-color: #f0f0c0;
+                text-align: center;
+                font-size: 2em;
+                box-shadow: 3px 3px 3px #ccc;
+            }
+        }
+        
+    </style>
+
+</head>
+<body>
+
+    <timestamp-to-date 
+        timestamp="1382086394000"
+        lang="en"
+    ></timestamp-to-date>
+
+    <timestamp-to-date 
+        timestamp="1382086394000"
+        lang="es"
+    ></timestamp-to-date> 
+
+</body>
+</html>
