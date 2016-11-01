@@ -1,0 +1,52 @@
+<link rel="import" href="./blog-404.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<dom-module id="blog-posts-single">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+
+        <iron-ajax
+             auto
+             url="https://jsonplaceholder.typicode.com/posts/[[postId]]"
+             handle-as="json"
+             last-response="{{item}}"
+        ></iron-ajax>
+
+        <template is="dom-if" if="[[postExist]]">
+            <h2>[[item.title]]</h2>
+            <p>[[item.body]]</p>
+        </template>
+
+        <template is="dom-if" if="[[!postExist]]">
+            <blog-404></blog-404>
+        </template>
+
+    </template>
+    <script>
+        Polymer({
+            is: 'blog-posts-single',
+            properties: {
+                postId: {
+                    type: String,
+                    value: '',
+                },
+                item: {
+                    type: Object,
+                    value: function(){
+                        return [];
+                    }
+                },
+                postExist: {
+                    type: Boolean,
+                    computed: '_computedPostExist(item)'
+                }
+            },
+            _computedPostExist: function(item) {
+                return !!item.id;
+            }
+        });
+    </script>
+</dom-module>
